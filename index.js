@@ -24,10 +24,15 @@ dotenv.config();
 const app = express();
 const server = createServer(app);
 
+// Parse CORS origins
+const corsOrigins = process.env.CORS_ORIGIN 
+  ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim())
+  : ["http://localhost:5173"];
+
 // Initialize Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+    origin: corsOrigins,
     methods: ["GET", "POST"]
   }
 });
@@ -40,7 +45,7 @@ app.use(helmet());
 app.use(compression());
 app.use(morgan('combined'));
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+  origin: corsOrigins,
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
@@ -138,7 +143,7 @@ io.on('connection', (socket) => {
       console.error('Error sending message:', error);
     }
   });
-
+  
   // Typing indicators
   socket.on('typing-start', (wa_id) => {
     if (socket.userId) {

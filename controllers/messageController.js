@@ -7,29 +7,21 @@ export const getConversations = async (req, res) => {
   try {
     const { filter = 'all' } = req.query;
     
-    if (isConnected) {
-      let query = {};
-      
-      // Apply filter
-      if (filter === 'unread') {
-        query.unread_count = { $gt: 0 };
-      }
-      
-      const conversations = await Conversation.find(query)
-        .sort({ updated_at: -1 })
-        .lean();
-
-      res.status(200).json({
-        success: true,
-        data: conversations
-      });
-    } else {
-      const conversations = await mockDataService.getConversations(filter);
-      res.status(200).json({
-        success: true,
-        data: conversations
-      });
+    let query = {};
+    
+    // Apply filter
+    if (filter === 'unread') {
+      query.unread_count = { $gt: 0 };
     }
+    
+    const conversations = await Conversation.find(query)
+      .sort({ updated_at: -1 })
+      .lean();
+
+    res.status(200).json({
+      success: true,
+      data: conversations
+    });
   } catch (error) {
     console.error('Error fetching conversations:', error);
     res.status(500).json({

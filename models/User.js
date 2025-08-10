@@ -5,7 +5,6 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true,
     trim: true,
     minlength: 3,
     maxlength: 30
@@ -13,7 +12,6 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
     trim: true,
     lowercase: true
   },
@@ -48,8 +46,7 @@ const userSchema = new mongoose.Schema({
   },
   wa_id: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   },
   created_at: {
     type: Date,
@@ -89,9 +86,9 @@ userSchema.methods.toPublicJSON = function() {
 };
 
 // Indexes
-userSchema.index({ username: 1 });
-userSchema.index({ email: 1 });
-userSchema.index({ wa_id: 1 });
+userSchema.index({ username: 1 }, { unique: true });
+userSchema.index({ email: 1 }, { unique: true });
+userSchema.index({ wa_id: 1 }, { unique: true });
 
 const User = mongoose.model('User', userSchema);
 

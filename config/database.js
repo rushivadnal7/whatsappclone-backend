@@ -21,7 +21,7 @@ const connectDB = async () => {
     if (!mongoUri) {
       console.error('MONGODB_URI is not defined in environment variables');
       console.error('Please create a .env file with your MongoDB connection string');
-      console.error('Example: MONGODB_URI=mongodb://localhost:27017/whatsapp-clone');
+      console.error('Example: MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/whatsapp');
       process.exit(1);
     }
 
@@ -29,28 +29,19 @@ const connectDB = async () => {
 
     console.log(`MongoDB Connected: ${conn.connection.host}`);
     isConnected = true;
-    
-    // Also initialize mock service for development/testing
-    await initializeMockService();
   } catch (error) {
     console.error(`MongoDB Connection Error: ${error.message}`);
     console.error('');
-    console.error('Starting with mock data service for development...');
+    console.error('Please check your MongoDB connection string in the .env file');
+    console.error('For MongoDB Atlas:');
+    console.error('1. Go to https://www.mongodb.com/atlas');
+    console.error('2. Create a free cluster');
+    console.error('3. Get your connection string and update .env file');
     console.error('');
-    console.error('To use MongoDB:');
-    console.error('1. Install MongoDB locally: https://docs.mongodb.com/manual/installation/');
-    console.error('2. Or use MongoDB Atlas: https://www.mongodb.com/atlas');
-    console.error('3. Update your .env file with the correct MONGODB_URI');
+    console.error('Example connection string:');
+    console.error('MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/whatsapp?retryWrites=true&w=majority');
     console.error('');
-    console.error('For quick testing, you can use MongoDB Atlas free tier:');
-    console.error('- Go to https://www.mongodb.com/atlas');
-    console.error('- Create a free cluster');
-    console.error('- Get your connection string and update .env file');
-    console.error('');
-    
-    // Initialize mock data service
-    await initializeMockService();
-    console.log('Mock data service initialized');
+    process.exit(1);
   }
 };
 
